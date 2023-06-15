@@ -1,16 +1,13 @@
 const Router = require('../../router');
 
 const ArticlesDao = require('../articles.dao');
+const CustomError = require('../../../services/errors/error.service');
 
 class GenerateSiteMap extends Router {
     formatItem(item) {
         return {
-            title: item.title,
-            description: item.description,
-            content: item.content,
             visibledDate: item.visibledDate,
-            url: item.url,
-            img: item.img
+            url: item.url
         };
     }
     async process() {
@@ -23,10 +20,9 @@ class GenerateSiteMap extends Router {
             const max = await ArticlesDao.count(sqlQuery);
 
             this.res.send({
-                max: Math.ceil(max / nbArticleByPage),
-                current: query.page || 0,
+                max: Math.ceil(Number(max) / Number(nbArticleByPage)),
+                current: Number(query.page) || 0,
                 data: {
-                    ...items,
                     items: items.map((item) => {
                         return this.formatItem(item);
                     })

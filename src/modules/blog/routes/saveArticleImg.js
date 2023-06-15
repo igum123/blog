@@ -10,7 +10,7 @@ class SaveArticleImg extends Router {
     }
     async usecase() {
         const informations = await UploadService.upload(this.req);
-        return { data: informations.files[0].newFilename };
+        return { data: informations.files.file.newFilename };
     }
 }
 
